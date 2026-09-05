@@ -28,7 +28,7 @@ const Landing = () => {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center">
             <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <HiSparkles className="w-4 h-4 text-yellow-300" />
-              <span className="text-white/90 text-sm font-medium">SIH 2026 Winner Solution</span>
+              <span className="text-white/90 text-sm font-medium">Farm to Consumer Digital Marketplace</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-heading leading-tight">
               Bridging Farmers<br />
