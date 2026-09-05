@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HiTrendingUp, HiShoppingCart, HiCurrencyRupee, HiPackage, HiPlus, HiEye, HiTrash, HiCheckCircle } from 'react-icons/hi';
+import { HiTrendingUp, HiShoppingCart, HiCurrencyRupee, HiCube, HiPlus, HiEye, HiTrash, HiCheckCircle } from 'react-icons/hi';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import toast from 'react-hot-toast';
@@ -84,7 +84,7 @@ const FarmerDashboard = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="card-premium p-6 bg-gradient-to-br from-green-500 to-emerald-600 text-white"><HiCurrencyRupee className="w-8 h-8 mb-3 opacity-80" /><h3 className="text-2xl font-bold">₹{totalEarnings.toLocaleString()}</h3><p className="text-green-100 text-sm">Total Earnings</p></div>
           <div className="card-premium p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white"><HiShoppingCart className="w-8 h-8 mb-3 opacity-80" /><h3 className="text-2xl font-bold">{orders.length}</h3><p className="text-blue-100 text-sm">Total Orders</p></div>
-          <div className="card-premium p-6 bg-gradient-to-br from-orange-500 to-amber-600 text-white"><HiPackage className="w-8 h-8 mb-3 opacity-80" /><h3 className="text-2xl font-bold">{products.length}</h3><p className="text-orange-100 text-sm">Products Listed</p></div>
+          <div className="card-premium p-6 bg-gradient-to-br from-orange-500 to-amber-600 text-white"><HiCube className="w-8 h-8 mb-3 opacity-80" /><h3 className="text-2xl font-bold">{products.length}</h3><p className="text-orange-100 text-sm">Products Listed</p></div>
           <div className="card-premium p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white"><HiTrendingUp className="w-8 h-8 mb-3 opacity-80" /><h3 className="text-2xl font-bold">{totalSold} kg</h3><p className="text-purple-100 text-sm">Total Sold</p></div>
         </div>
 
