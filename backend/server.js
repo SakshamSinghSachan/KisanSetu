@@ -39,7 +39,6 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/logistics', require('./routes/logistics'));
 app.use('/api/chat', require('./routes/chat'));
-app.use('/api/admin', require('./routes/admin'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'KisanSetu API is running' });

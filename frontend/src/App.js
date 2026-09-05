@@ -15,7 +15,6 @@ import Analytics from './pages/Analytics';
 import Logistics from './pages/Logistics';
 import Chat from './pages/Chat';
 import Profile from './pages/Profile';
-import AdminDashboard from './pages/AdminDashboard';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -42,7 +41,6 @@ const App = () => {
           <Route path="/logistics" element={<ProtectedRoute><Logistics /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
