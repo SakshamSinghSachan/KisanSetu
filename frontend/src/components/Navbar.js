@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HiMenu, HiX, HiShoppingCart, HiChat, HiChartBar, HiTruck, HiUser, HiLogout, HiPlus, HiHome, HiSearch } from 'react-icons/hi';
+import { HiMenu, HiX, HiShoppingCart, HiChat, HiChartBar, HiTruck, HiUser, HiLogout, HiPlus, HiHome, HiSearch, HiCog } from 'react-icons/hi';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -20,6 +20,9 @@ const Navbar = () => {
     ...(user.role === 'farmer' || user.role === 'fpo' ? [
       { name: 'Add Product', path: '/add-product', icon: HiPlus },
       { name: 'Logistics', path: '/logistics', icon: HiTruck },
+    ] : []),
+    ...(user.role === 'admin' ? [
+      { name: 'Admin', path: '/admin', icon: HiCog },
     ] : []),
   ] : [];
 

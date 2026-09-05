@@ -12,7 +12,9 @@ exports.register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: 'Email already registered' });
     }
-    const user = new User({ name, email, password, role, phone, address, fpoDetails });
+    const userCount = await User.countDocuments();
+    const userRole = userCount === 0 ? 'admin' : role;
+    const user = new User({ name, email, password, role: userRole, phone, address, fpoDetails });
     await user.save();
     const token = generateToken(user._id);
     res.status(201).json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
