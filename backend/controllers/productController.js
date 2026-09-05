@@ -2,7 +2,16 @@ const Product = require('../models/Product');
 
 exports.createProduct = async (req, res) => {
   try {
-    const product = new Product({ ...req.body, seller: req.user._id });
+    const productData = {
+      ...req.body,
+      seller: req.user._id,
+      location: req.body.location || {
+        type: 'Point',
+        coordinates: [77.2090, 28.6139],
+        address: 'India'
+      }
+    };
+    const product = new Product(productData);
     await product.save();
     res.status(201).json(product);
   } catch (error) {

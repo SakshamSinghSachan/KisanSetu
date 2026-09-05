@@ -12,8 +12,8 @@ const productSchema = new mongoose.Schema({
   images: [{ type: String }],
   location: {
     type: { type: String, default: 'Point' },
-    coordinates: [Number],
-    address: String
+    coordinates: { type: [Number], default: [77.2090, 28.6139] },
+    address: { type: String, default: 'India' }
   },
   organic: { type: Boolean, default: false },
   harvestDate: Date,

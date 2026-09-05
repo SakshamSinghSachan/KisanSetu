@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HiUpload, HiX } from 'react-icons/hi';
+import { HiUpload, HiX, HiPhotograph } from 'react-icons/hi';
 import toast from 'react-hot-toast';
 
 const categories = ['Vegetables', 'Fruits', 'Grains', 'Dairy', 'Spices', 'Organic', 'Other'];
@@ -10,18 +10,57 @@ const units = ['kg', 'dozen', 'piece', 'bundle', 'litre', 'quintal'];
 const AddProduct = () => {
   const { API } = useAuth();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const [form, setForm] = useState({
     name: '', description: '', category: 'Vegetables', price: '', unit: 'kg', quantity: '',
     organic: false, harvestDate: '', minOrderQuantity: '1',
     bulkDiscount: { enabled: false, minQuantity: '', discountPercent: '' }
   });
+  const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + images.length > 5) {
+      toast.error('Maximum 5 images allowed');
+      return;
+    }
+    files.forEach(file => {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size should be less than 5MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreviews(prev => [...prev, e.target.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+    setImages(prev => [...prev, ...files]);
+  };
+
+  const removeImage = (index) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await API.post('/products', { ...form, price: Number(form.price), quantity: Number(form.quantity) });
+      const imageData = imagePreviews.length > 0 ? imagePreviews : [];
+      await API.post('/products', {
+        ...form,
+        price: Number(form.price),
+        quantity: Number(form.quantity),
+        images: imageData,
+        location: {
+          type: 'Point',
+          coordinates: [77.2090, 28.6139],
+          address: 'India'
+        }
+      });
       toast.success('Product listed successfully!');
       navigate('/dashboard');
     } catch (error) { toast.error(error.response?.data?.error || 'Failed to add product'); }
@@ -74,7 +113,7 @@ const AddProduct = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Unit *</label>
                 <select value={form.unit} onChange={(e) => setForm({...form, unit: e.target.value})} className="input-field">
-                  {units.map(u => <option key={u}>per {u}</option>)}
+                  {units.map(u => <option key={u}>{u}</option>)}
                 </select>
               </div>
               <div>
@@ -94,10 +133,25 @@ const AddProduct = () => {
 
           <div className="card-premium p-6">
             <h2 className="text-lg font-semibold mb-4">Product Images</h2>
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary-500 transition cursor-pointer">
-              <HiUpload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-600 mb-2">Click to upload or drag and drop</p>
-              <p className="text-sm text-gray-400">PNG, JPG up to 5MB</p>
+            <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" />
+            
+            {imagePreviews.length > 0 && (
+              <div className="grid grid-cols-5 gap-3 mb-4">
+                {imagePreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img src={preview} alt="" className="w-full h-24 object-cover rounded-xl" />
+                    <button type="button" onClick={() => removeImage(index)} className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                      <HiX className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div onClick={() => fileInputRef.current?.click()} className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary-500 hover:bg-primary-50 transition cursor-pointer">
+              <HiPhotograph className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-600 mb-2">Click to upload images</p>
+              <p className="text-sm text-gray-400">PNG, JPG up to 5MB (Max 5 images)</p>
             </div>
           </div>
 
