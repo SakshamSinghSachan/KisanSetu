@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Marketplace from './pages/Marketplace';
 import ProductDetail from './pages/ProductDetail';
 import Dashboard from './pages/Dashboard';
+import FarmerDashboard from './pages/FarmerDashboard';
 import AddProduct from './pages/AddProduct';
 import Orders from './pages/Orders';
 import Analytics from './pages/Analytics';
@@ -20,6 +21,14 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div></div>;
   return user ? children : <Navigate to="/login" />;
+};
+
+const DashboardRouter = () => {
+  const { user } = useAuth();
+  if (user?.role === 'farmer' || user?.role === 'fpo') {
+    return <FarmerDashboard />;
+  }
+  return <Dashboard />;
 };
 
 const App = () => {
@@ -34,7 +43,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
           <Route path="/add-product" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
           <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
