@@ -26,10 +26,6 @@ const Landing = () => {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnYtMmgtNHY2aDJ2MnptMC04di0yaC0ydjJoMnptNiA4aC0ydjRoMnYtNHptMC04di0yaC0ydjJoMnptNiA4aC0ydjRoMnYtNHptMC04di0yaC0ydjJoMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
         <div className="max-w-7xl mx-auto relative">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center">
-            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <HiSparkles className="w-4 h-4 text-yellow-300" />
-              <span className="text-white/90 text-sm font-medium">Farm to Consumer Digital Marketplace</span>
-            </div>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-heading leading-tight">
               Bridging Farmers<br />
               <span className="text-yellow-300">Directly</span> to Your Table
