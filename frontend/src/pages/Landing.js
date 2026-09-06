@@ -78,7 +78,7 @@ const Landing = () => {
               className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 mb-8"
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              <span className="text-white/90 text-sm font-medium">SIH 2026 | Ministry of Consumer Affairs</span>
+              <span className="text-white/90 text-sm font-medium">KisanSetu</span>
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 font-heading leading-tight">
@@ -416,7 +416,7 @@ const Landing = () => {
 
           {/* Bottom Bar */}
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
-            <p className="text-gray-500 text-sm mb-4 md:mb-0">© 2026 KisanSetu. All rights reserved. SIH 2026</p>
+            <p className="text-gray-500 text-sm mb-4 md:mb-0">© 2026 KisanSetu. All rights reserved.</p>
             <div className="flex items-center space-x-6 text-sm text-gray-500">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

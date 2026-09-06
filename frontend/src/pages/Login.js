@@ -185,7 +185,6 @@ const Login = () => {
           transition={{ delay: 0.5 }}
           className="text-center mt-8 text-white/60 text-sm"
         >
-          SIH 2026 | Smart India Hackathon
         </motion.p>
       </motion.div>
     </div>
