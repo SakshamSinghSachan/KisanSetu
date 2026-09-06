@@ -1,0 +1,733 @@
+================================================================================
+                         KISANSETU
+              Farm to Consumer Digital Marketplace
+         Smart India Hackathon 2026 - Problem Statement SIH26033
+================================================================================
+
+                    TECHNOLOGICAL APPROACH DOCUMENT
+
+================================================================================
+
+TABLE OF CONTENTS
+================================================================================
+
+1. Executive Summary
+2. Problem Statement
+3. Proposed Solution
+4. Technology Stack
+5. System Architecture
+6. Data Flow Diagrams
+7. Database Design
+8. API Endpoints
+9. Key Algorithms
+10. Security Implementation
+11. Deployment Architecture
+12. Features & Modules
+13. Impact & Benefits
+14. Future Scope
+
+================================================================================
+
+1. EXECUTIVE SUMMARY
+================================================================================
+
+KisanSetu is a digital marketplace that connects farmers directly with consumers,
+eliminating middlemen and ensuring fair prices for both parties. The platform
+leverages AI-powered analytics for demand forecasting and smart logistics for
+route optimization.
+
+Key Highlights:
+- Direct farmer-to-consumer connection
+- AI-powered demand forecasting
+- Smart logistics with route optimization
+- Real-time chat between buyers and sellers
+- Role-based access (Farmer, Consumer, FPO, Bulk Buyer)
+
+================================================================================
+
+2. PROBLEM STATEMENT (SIH26033)
+================================================================================
+
+Organization: Ministry of Consumer Affairs, Food & Public Distribution
+Category: Software
+Theme: Agriculture, FoodTech & Rural Development
+
+Problem:
+Multiple intermediaries reduce farmers' earnings and increase consumer prices.
+
+Expected Solution:
+Create a digital marketplace that:
+- Connects farmers/FPOs directly with consumers and bulk buyers
+- Provides logistics support
+- Uses AI for demand forecasting and route optimization
+
+Benefits:
+- Better prices for farmers
+- Lower prices for consumers
+- Reduced supply chain inefficiencies
+
+================================================================================
+
+3. PROPOSED SOLUTION
+================================================================================
+
+KisanSetu addresses the problem by creating a complete digital ecosystem:
+
+a) Direct Marketplace
+   - Farmers list products with photos, prices, and descriptions
+   - Consumers browse and purchase directly
+   - No middlemen involved
+
+b) AI-Powered Analytics
+   - Demand forecasting based on historical data
+   - Price trend analysis
+   - Seasonal demand predictions
+
+c) Smart Logistics
+   - Route optimization using Nearest Neighbor algorithm
+   - Distance and time calculations
+   - Cost estimation for deliveries
+
+d) Communication Platform
+   - Real-time chat between buyers and sellers
+   - Order status notifications
+   - Direct farmer contact
+
+================================================================================
+
+4. TECHNOLOGY STACK
+================================================================================
+
++-------------------+-------------------+---------------------------+
+| Layer             | Technology        | Purpose                   |
++-------------------+-------------------+---------------------------+
+| Frontend          | React.js 18       | UI Components & SPA       |
+| Styling           | Tailwind CSS      | Premium responsive design |
+| Charts            | Chart.js          | Analytics & visualization |
+| Animation         | Framer Motion     | Smooth UI transitions     |
+| Icons             | React Icons       | Icon library              |
++-------------------+-------------------+---------------------------+
+| Backend           | Node.js           | JavaScript runtime        |
+| Framework         | Express.js        | REST API server           |
+| Real-time         | Socket.io         | Live chat system          |
+| Authentication    | JWT               | Token-based auth          |
+| Password Hashing  | bcrypt            | Security                  |
++-------------------+-------------------+---------------------------+
+| Database          | MongoDB Atlas     | Cloud NoSQL database      |
+| ODM               | Mongoose          | MongoDB modeling          |
++-------------------+-------------------+---------------------------+
+| Deployment        | Vercel            | Frontend hosting          |
+|                   | Render            | Backend hosting           |
+| Version Control   | Git + GitHub      | Code management           |
++-------------------+-------------------+---------------------------+
+
+================================================================================
+
+5. SYSTEM ARCHITECTURE
+================================================================================
+
++-------------------------------------------------------------+
+|                    CLIENT (Browser)                          |
+|  +-------------+  +-------------+  +-------------+          |
+|  |   Farmer    |  |  Consumer   |  |  Bulk Buyer |          |
+|  |  Interface  |  |  Interface  |  |  Interface  |          |
+|  +------+------+  +------+------+  +------+------+          |
+|         |                |                |                  |
+|         +----------------+----------------+                  |
+|                          |                                   |
+|                    React.js + Tailwind                       |
++-------------------------------------------------------------+
+                          |
+                          | HTTPS / REST API
+                          |
++-------------------------------------------------------------+
+|                    SERVER (Node.js)                          |
+|  +------------------------------------------------------+  |
+|  |              Express.js Router                        |  |
+|  +------------------------------------------------------+  |
+|                         |                                   |
+|  +---------+---------+---------+---------+---------+       |
+|  |  Auth   |Products | Orders  |Analytics |  Chat   |       |
+|  | Module  | Module  | Module  |  Module  | Module  |       |
+|  +----+----+----+----+----+----+----+----+----+----+       |
+|       |         |         |         |         |             |
+|  +----+---------+---------+---------+---------+----+       |
+|  |              Middleware Layer                      |       |
+|  |   JWT Auth  |  CORS  |  Rate Limit  |  Logger    |       |
+|  +---------------------------------------------------+       |
++-------------------------------------------------------------+
+                          |
+                          |
++-------------------------------------------------------------+
+|                  DATABASE LAYER                              |
+|  +------------------------------------------------------+  |
+|  |          MongoDB Atlas (Cloud)                        |  |
+|  +------------------------------------------------------+  |
+|  |  Users  | Products | Orders  |  Chats  |  Messages   |  |
+|  |Collection|Collection|Collection|Collection|Collection  |  |
+|  +------------------------------------------------------+  |
++-------------------------------------------------------------+
+
+================================================================================
+
+6. DATA FLOW DIAGRAMS
+================================================================================
+
+6.1 USER REGISTRATION FLOW
+---------------------------
+
++----------+     +----------+     +----------+     +----------+
+|  User    |---->| Frontend |---->| Backend  |---->| MongoDB  |
+|  Fills   |     |  React   |     | Express  |     | Atlas    |
+|  Form    |     |          |     |          |     |          |
++----------+     +----------+     +----------+     +----------+
+      |               |               |               |
+      |               |               |               |
+  Validate        Hash Password   Save User
+  Form Data       (bcrypt)        Document
+      |               |               |
+      |               |               |
+  Show Success    Generate JWT    Return
+  Message         Token           Response
+
+
+6.2 PRODUCT LISTING FLOW
+-------------------------
+
++----------+     +----------+     +----------+     +----------+
+|  Farmer  |---->| Upload   |---->| Backend  |---->| MongoDB  |
+|  Adds    |     | Images   |     | API      |     | Store    |
+|  Product |     | (Base64) |     |          |     |          |
++----------+     +----------+     +----------+     +----------+
+      |               |               |               |
+      |               |               |               |
+  Convert to      Validate &      Save Product
+  Base64 String   Process Data    with Geo Location
+      |               |               |
+      |               |               |
+  Show Preview    Return Success   Index for
+                  Response         Search
+
+
+6.3 ORDER PLACEMENT FLOW
+-------------------------
+
++----------+     +----------+     +----------+     +----------+
+| Consumer |---->| Checkout |---->| Backend  |---->| MongoDB  |
+| Clicks   |     | Modal    |     | API      |     |          |
+| Buy Now  |     |          |     |          |     |          |
++----------+     +----------+     +----------+     +----------+
+      |               |               |               |
+      |               |               |               |
+  Enter Address   Create Order    Update Stock
+  Payment Method  Calculate Tax   Save Order
+                                  Generate ID
+      |               |               |
+      |               |               |
+  Show Order      Return Order    Store in
+  Confirmation    Details         Database
+
+
+6.4 AI ANALYTICS FLOW
+----------------------
+
++----------+     +----------+     +----------+     +----------+
+| Request  |---->| Query    |---->| Aggregate|---->| Return   |
+| Analytics|     | MongoDB  |     | Data     |     | Insights |
+| Data     |     | Orders   |     |          |     |          |
++----------+     +----------+     +----------+     +----------+
+      |               |               |               |
+      |               |               |               |
+  Fetch           Calculate      Generate
+  Historical      Trends &       Forecast
+  Order Data      Patterns       Charts
+      |               |               |
+      |               |               |
+  Filter by       Compute        Render
+  Category/Date   Averages       Charts
+
+
+6.5 ROUTE OPTIMIZATION FLOW
+----------------------------
+
++----------+     +----------+     +----------+     +----------+
+| Farmer   |---->| Enter    |---->| Nearest  |---->| Return   |
+| Requests |     | Delivery |     | Neighbor |     | Optimal  |
+| Route    |     | Points   |     | Algorithm|     | Route    |
++----------+     +----------+     +----------+     +----------+
+      |               |               |               |
+      |               |               |               |
+  Get Origin &   Calculate       Generate
+  Destinations   Distances       Route Map
+  Coordinates    (Haversine)     Estimate
+      |               |          Time/Cost
+      |               |               |
+  Sort Points     Find Shortest  Display
+  by Distance     Path           Results
+
+================================================================================
+
+7. DATABASE DESIGN
+================================================================================
+
+7.1 ENTITY RELATIONSHIP DIAGRAM
+---------------------------------
+
++-----------------+         +-----------------+
+|     USERS       |         |    PRODUCTS     |
++-----------------+         +-----------------+
+| _id (ObjectId)  |<------->| _id (ObjectId)  |
+| name (String)   |   1:N   | seller (Ref)    |--> Users._id
+| email (String)  |         | name (String)   |
+| password (Hash) |         | price (Number)  |
+| role (Enum)     |         | quantity (Num)  |
+| phone (String)  |         | category (Str)  |
+| address (Object)|         | images (Array)  |
+| rating (Num)    |         | location (Geo)  |
+| createdAt       |         | organic (Bool)  |
++-----------------+         | ratings (Num)   |
+        ^                   | soldCount (Num) |
+        |                   | isActive (Bool) |
+        |                   | createdAt       |
+        |                   +-----------------+
+        |
++-----------------+         +-----------------+
+|     ORDERS      |         |     CHATS       |
++-----------------+         +-----------------+
+| _id (ObjectId)  |         | _id (ObjectId)  |
+| orderNumber     |         | participants    |--> Users._id (Array)
+| buyer (Ref)     |--> Users | lastMessage     |
+| seller (Ref)    |--> Users | unreadCount     |
+| items (Array)   |         | createdAt       |
+| subtotal        |         +-----------------+
+| deliveryFee     |                  |
+| tax             |                  v
+| total           |         +-----------------+
+| status (Enum)   |         |    MESSAGES     |
+| paymentStatus   |         +-----------------+
+| shippingAddress |         | _id (ObjectId)  |
+| tracking (Array)|         | chat (Ref)      |--> Chats._id
+| rating (Num)    |         | sender (Ref)    |--> Users._id
+| review (String) |         | content (String)|
+| createdAt       |         | type (Enum)     |
++-----------------+         | readBy (Array)  |
+                            | createdAt       |
+                            +-----------------+
+
+
+7.2 COLLECTION SCHEMAS
+------------------------
+
+USERS COLLECTION:
+{
+  _id: ObjectId,
+  name: String (required),
+  email: String (required, unique),
+  password: String (hashed, required),
+  role: Enum ['farmer', 'consumer', 'fpo', 'bulkBuyer'],
+  phone: String (required),
+  avatar: String,
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    pincode: String,
+    coordinates: { lat: Number, lng: Number }
+  },
+  rating: Number (default: 0),
+  totalRatings: Number (default: 0),
+  createdAt: Date,
+  updatedAt: Date
+}
+
+PRODUCTS COLLECTION:
+{
+  _id: ObjectId,
+  seller: ObjectId (ref: Users, required),
+  name: String (required),
+  description: String (required),
+  category: String (required),
+  price: Number (required),
+  unit: String (default: 'kg'),
+  quantity: Number (required),
+  images: [String],
+  location: {
+    type: { type: String, default: 'Point' },
+    coordinates: [Number],
+    address: String
+  },
+  organic: Boolean (default: false),
+  harvestDate: Date,
+  ratings: Number (default: 0),
+  totalRatings: Number (default: 0),
+  soldCount: Number (default: 0),
+  isActive: Boolean (default: true),
+  tags: [String],
+  minOrderQuantity: Number (default: 1),
+  bulkDiscount: {
+    enabled: Boolean,
+    minQuantity: Number,
+    discountPercent: Number
+  },
+  createdAt: Date,
+  updatedAt: Date
+}
+
+ORDERS COLLECTION:
+{
+  _id: ObjectId,
+  orderNumber: String (required, unique),
+  buyer: ObjectId (ref: Users, required),
+  seller: ObjectId (ref: Users, required),
+  items: [{
+    product: ObjectId (ref: Products),
+    name: String,
+    quantity: Number,
+    unit: String,
+    price: Number,
+    total: Number
+  }],
+  subtotal: Number (required),
+  deliveryFee: Number (default: 0),
+  tax: Number (default: 0),
+  total: Number (required),
+  status: Enum ['pending', 'confirmed', 'processing', 'shipped', 'outForDelivery', 'delivered', 'cancelled'],
+  paymentStatus: Enum ['pending', 'paid', 'failed', 'refunded'],
+  paymentMethod: String (default: 'cod'),
+  shippingAddress: {
+    street: String,
+    city: String,
+    state: String,
+    pincode: String
+  },
+  deliveryDate: Date,
+  estimatedDelivery: Date,
+  tracking: [{
+    status: String,
+    location: String,
+    timestamp: Date,
+    note: String
+  }],
+  rating: Number,
+  review: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+
+================================================================================
+
+8. API ENDPOINTS
+================================================================================
+
++------------------------------------------------------------------+
+|                        AUTH ENDPOINTS                             |
++------------------------------------------------------------------+
+| POST   /api/auth/register     | Create new account               |
+| POST   /api/auth/login        | Login and get JWT token          |
+| GET    /api/auth/profile      | Get logged-in user profile       |
+| PUT    /api/auth/profile      | Update user profile              |
++------------------------------------------------------------------+
+
++------------------------------------------------------------------+
+|                      PRODUCTS ENDPOINTS                           |
++------------------------------------------------------------------+
+| GET    /api/products          | List all products (with filters) |
+| GET    /api/products/:id      | Get single product details       |
+| POST   /api/products          | Create product (Farmer only)     |
+| PUT    /api/products/:id      | Update product (Owner only)      |
+| DELETE /api/products/:id      | Delete product (Owner only)      |
+| GET    /api/products/my-products | Get farmer's own products     |
++------------------------------------------------------------------+
+
++------------------------------------------------------------------+
+|                       ORDERS ENDPOINTS                            |
++------------------------------------------------------------------+
+| GET    /api/orders            | Get user's orders                |
+| GET    /api/orders/:id        | Get order details                |
+| POST   /api/orders            | Place new order                  |
+| PUT    /api/orders/:id/status | Update order status              |
++------------------------------------------------------------------+
+
++------------------------------------------------------------------+
+|                        CHAT ENDPOINTS                             |
++------------------------------------------------------------------+
+| GET    /api/chat              | Get user's conversations         |
+| POST   /api/chat              | Start new conversation           |
+| GET    /api/chat/:id/messages | Get messages in a chat           |
+| POST   /api/chat/:id/messages | Send a message                   |
++------------------------------------------------------------------+
+
++------------------------------------------------------------------+
+|                     ANALYTICS ENDPOINTS                           |
++------------------------------------------------------------------+
+| GET    /api/analytics/dashboard      | Dashboard statistics       |
+| GET    /api/analytics/demand-forecast | AI demand predictions    |
+| GET    /api/analytics/market-prices   | Market price trends      |
++------------------------------------------------------------------+
+
++------------------------------------------------------------------+
+|                     LOGISTICS ENDPOINTS                           |
++------------------------------------------------------------------+
+| POST   /api/logistics/optimize-route  | Optimize delivery route   |
+| GET    /api/logistics/track/:id       | Track delivery status     |
++------------------------------------------------------------------+
+
+================================================================================
+
+9. KEY ALGORITHMS
+================================================================================
+
+9.1 ROUTE OPTIMIZATION (NEAREST NEIGHBOR TSP)
+----------------------------------------------
+
+Purpose: Find the shortest path to deliver to multiple destinations
+
+Algorithm Steps:
+1. Start at the origin point (farmer's location)
+2. Find the nearest unvisited destination
+3. Move to that destination
+4. Mark it as visited
+5. Repeat steps 2-4 until all destinations are visited
+6. Calculate total distance using Haversine formula
+
+Time Complexity: O(n^2)
+Space Complexity: O(n)
+
+Haversine Formula (Distance between two points on Earth):
+d = 2R x arcsin(sqrt(sin^2(dlat/2) + cos(lat1) x cos(lat2) x sin^2(dlng/2)))
+
+Where:
+- R = Earth's radius (6371 km)
+- dlat = lat2 - lat1
+- dlng = lng2 - lng1
+
+
+9.2 DEMAND FORECASTING
+-----------------------
+
+Purpose: Predict future demand based on historical data
+
+Process:
+1. Aggregate orders by product category over time
+2. Calculate moving averages to identify trends
+3. Apply seasonal decomposition
+4. Generate confidence intervals
+5. Suggest optimal pricing based on demand
+
+Statistical Methods Used:
+- Time series analysis
+- Moving average
+- Trend calculation
+- Seasonal indexing
+
+================================================================================
+
+10. SECURITY IMPLEMENTATION
+================================================================================
+
++------------------------------------------------------------------+
+|                     SECURITY LAYERS                               |
++------------------------------------------------------------------+
+
+1. PASSWORD SECURITY
+   - bcrypt hashing with 12 rounds
+   - Salt generation for each password
+   - One-way hash (cannot be reversed)
+
+2. AUTHENTICATION
+   - JWT (JSON Web Tokens) for stateless auth
+   - 30-day token expiry
+   - Token stored in localStorage
+
+3. API PROTECTION
+   - Middleware verifies token on every protected request
+   - Returns 401 if token is invalid/expired
+
+4. ROLE-BASED ACCESS CONTROL
+   - Farmer: Can list products, view orders
+   - Consumer: Can browse, buy, chat
+   - FPO: Bulk management
+   - Bulk Buyer: Wholesale purchasing
+
+5. CORS (Cross-Origin Resource Sharing)
+   - Restricts API access to frontend URL only
+   - Prevents unauthorized domains
+
+6. INPUT VALIDATION
+   - Server-side validation on all inputs
+   - Sanitization of user data
+   - Type checking for all parameters
+
+7. DATA PROTECTION
+   - Passwords never returned in API responses
+   - Sensitive fields excluded from queries
+   - HTTPS encryption in production
+
+================================================================================
+
+11. DEPLOYMENT ARCHITECTURE
+================================================================================
+
++------------------------------------------------------------------+
+|                    DEPLOYMENT FLOW                                |
++------------------------------------------------------------------+
+
+Developer Machine
+       |
+       | Git Push
+       v
++------------------------------------------------------------------+
+|                  GitHub Repository                                |
+|            (Version Control & CI/CD)                              |
++------------------------------------------------------------------+
+       |
+       +------------------+------------------+
+       |                                     |
+       v                                     v
++------------------+              +------------------+
+|     Vercel       |              |     Render       |
+|   (Frontend)     |              |   (Backend)      |
+|                  |              |                  |
+| - React.js build |              | - Node.js server |
+| - Static files   |              | - Express.js API |
+| - Global CDN     |              | - Socket.io      |
++------------------+              +------------------+
+       |                                     |
+       |                                     |
+       v                                     v
++------------------+              +------------------+
+|    Browser       |              |  MongoDB Atlas   |
+|    (Client)      |              |   (Cloud DB)     |
+|                  |              |                  |
+| - React SPA      |              | - Users data     |
+| - Tailwind CSS   |              | - Products data  |
+| - Local Storage  |              | - Orders data    |
++------------------+              | - Chats data     |
+                                  +------------------+
+
+Environment Variables:
+
+Frontend (Vercel):
+- REACT_APP_API_URL = Backend API URL
+
+Backend (Render):
+- MONGODB_URI = MongoDB Atlas connection string
+- JWT_SECRET = Secret key for JWT signing
+- CLIENT_URL = Frontend URL for CORS
+- PORT = Server port (5000)
+
+================================================================================
+
+12. FEATURES & MODULES
+================================================================================
+
+12.1 USER MODULE
+-----------------
+- Multi-role registration (Farmer, Consumer, FPO, Bulk Buyer)
+- JWT-based authentication
+- Profile management
+- Password encryption
+
+12.2 PRODUCT MODULE
+--------------------
+- Product listing with images (Base64)
+- Category filtering
+- Price range filtering
+- Search functionality
+- Organic product flag
+- Bulk discount support
+
+12.3 ORDER MODULE
+------------------
+- Shopping cart functionality
+- Checkout with address
+- Order status tracking
+- Payment status management
+- Delivery tracking
+
+12.4 AI ANALYTICS MODULE
+--------------------------
+- Demand forecasting
+- Price trend analysis
+- Market price comparison
+- Seasonal demand patterns
+- Confidence scoring
+
+12.5 LOGISTICS MODULE
+-----------------------
+- Route optimization (Nearest Neighbor TSP)
+- Distance calculation (Haversine)
+- Time estimation
+- Cost calculation
+- Savings comparison
+
+12.6 CHAT MODULE
+------------------
+- Real-time messaging (Socket.io)
+- Conversation management
+- Message history
+- Online status
+
+================================================================================
+
+13. IMPACT & BENEFITS
+================================================================================
+
+13.1 FOR FARMERS
+-----------------
++ 30-40% increase in earnings (no middlemen)
++ Direct access to consumers
++ AI-powered pricing suggestions
++ Demand forecasting for better planning
++ Digital payment records
+
+13.2 FOR CONSUMERS
+-------------------
++ 20-30% lower prices (no intermediary margins)
++ Fresh produce directly from farms
++ Transparent pricing
++ Direct farmer communication
++ Quality assurance
+
+13.3 FOR THE ECONOMY
+---------------------
++ Reduced supply chain waste
++ Digital agriculture ecosystem
++ Job creation in logistics
++ Empowerment of small farmers
++ Transparent market data
+
+13.4 FOR THE ENVIRONMENT
+--------------------------
++ Reduced food waste through demand forecasting
++ Optimized delivery routes (less fuel)
++ Local sourcing (lower carbon footprint)
+
+================================================================================
+
+14. FUTURE SCOPE
+================================================================================
+
+Phase 2 Enhancements:
+- Mobile app (React Native)
+- Payment gateway integration (Razorpay)
+- Multi-language support (Hindi, Tamil, etc.)
+- GPS-based farmer discovery
+- Weather integration for crop planning
+- Government subsidy integration
+
+Phase 3 Enhancements:
+- IoT integration for crop monitoring
+- Blockchain for supply chain transparency
+- Drone delivery integration
+- AI chatbot for farmer support
+- Predictive analytics for crop diseases
+
+================================================================================
+
+                         END OF DOCUMENT
+
+              Prepared for Smart India Hackathon 2026
+                      Problem Statement: SIH26033
+
+================================================================================
