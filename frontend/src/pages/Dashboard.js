@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HiShoppingCart, HiSearch, HiClock, HiCheckCircle, HiTruck, HiStar, HiLocationMarker } from 'react-icons/hi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { HiShoppingCart, HiSearch, HiClock, HiCheckCircle, HiTruck, HiStar, HiLocationMarker, HiTrendingUp, HiArrowRight, HiOutlineChartBar } from 'react-icons/hi';
 
 const statusColors = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-blue-100 text-blue-800',
-  processing: 'bg-purple-100 text-purple-800',
-  shipped: 'bg-indigo-100 text-indigo-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800'
+  pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  confirmed: 'bg-blue-100 text-blue-800 border-blue-200',
+  processing: 'bg-purple-100 text-purple-800 border-purple-200',
+  shipped: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  delivered: 'bg-green-100 text-green-800 border-green-200',
+  cancelled: 'bg-red-100 text-red-800 border-red-200'
 };
 
 const statusIcons = {
@@ -40,111 +41,231 @@ const Dashboard = () => {
   const pendingOrders = orders.filter(o => ['pending', 'confirmed', 'processing', 'shipped'].includes(o.status));
   const deliveredOrders = orders.filter(o => o.status === 'delivered');
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center pt-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div></div>;
+  const stats = [
+    { 
+      label: 'Total Orders', 
+      value: orders.length, 
+      icon: HiShoppingCart, 
+      color: 'from-primary-500 to-emerald-600',
+      bgColor: 'bg-primary-50',
+      iconColor: 'text-primary-500'
+    },
+    { 
+      label: 'In Progress', 
+      value: pendingOrders.length, 
+      icon: HiClock, 
+      color: 'from-orange-500 to-amber-600',
+      bgColor: 'bg-orange-50',
+      iconColor: 'text-orange-500'
+    },
+    { 
+      label: 'Total Spent', 
+      value: `₹${totalSpent.toLocaleString()}`, 
+      icon: HiTrendingUp, 
+      color: 'from-blue-500 to-indigo-600',
+      bgColor: 'bg-blue-50',
+      iconColor: 'text-blue-500'
+    }
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center pt-20 bg-gradient-to-br from-gray-50 to-primary-50/30">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500 font-medium">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50/30 pt-20">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold font-heading">My Orders</h1>
-          <p className="text-gray-600 mt-1">Track your purchases and deliveries</p>
-        </div>
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <h1 className="text-4xl font-bold font-heading text-gray-900">
+            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-saffron-500">{user?.name}</span>
+          </h1>
+          <p className="text-gray-600 mt-2 text-lg">Track your purchases and deliveries</p>
+        </motion.div>
 
+        {/* Stats Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="card-premium p-6 bg-gradient-to-br from-primary-500 to-emerald-600 text-white">
-            <HiShoppingCart className="w-8 h-8 mb-3 opacity-80" />
-            <h3 className="text-2xl font-bold">{orders.length}</h3>
-            <p className="text-green-100 text-sm">Total Orders</p>
-          </div>
-          <div className="card-premium p-6 bg-gradient-to-br from-orange-500 to-amber-600 text-white">
-            <HiClock className="w-8 h-8 mb-3 opacity-80" />
-            <h3 className="text-2xl font-bold">{pendingOrders.length}</h3>
-            <p className="text-orange-100 text-sm">In Progress</p>
-          </div>
-          <div className="card-premium p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
-            <HiTruck className="w-8 h-8 mb-3 opacity-80" />
-            <h3 className="text-2xl font-bold">₹{totalSpent.toLocaleString()}</h3>
-            <p className="text-blue-100 text-sm">Total Spent</p>
-          </div>
-        </div>
-
-        <div className="flex gap-2 mb-6">
-          {[{ id: 'orders', label: 'All Orders' }, { id: 'active', label: `Active (${pendingOrders.length})` }, { id: 'delivered', label: `Delivered (${deliveredOrders.length})` }].map(tab => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-4 py-2 rounded-full text-sm font-medium transition ${activeTab === tab.id ? 'bg-primary-600 text-white' : 'bg-white border text-gray-600'}`}>
-              {tab.label}
-            </button>
+          {stats.map((stat, index) => (
+            <motion.div 
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="group bg-white rounded-3xl p-6 shadow-card hover:shadow-premium transition-all duration-500 border border-gray-100 hover:border-primary-200 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-100 to-saffron-100 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+              
+              <div className="relative">
+                <div className={`w-14 h-14 ${stat.bgColor} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <stat.icon className={`w-7 h-7 ${stat.iconColor}`} />
+                </div>
+                <h3 className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</h3>
+                <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
+              </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className="space-y-4">
-          {(activeTab === 'orders' ? orders : activeTab === 'active' ? pendingOrders : deliveredOrders).map(order => (
-            <div key={order._id} className="card-premium p-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="font-bold text-primary-600 text-lg">#{order.orderNumber}</span>
-                    <span className={`badge ${statusColors[order.status]}`}>{order.status}</span>
-                  </div>
+        {/* Tabs */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex gap-3 mb-8"
+        >
+          {[
+            { id: 'orders', label: 'All Orders' }, 
+            { id: 'active', label: `Active (${pendingOrders.length})` }, 
+            { id: 'delivered', label: `Delivered (${deliveredOrders.length})` }
+          ].map(tab => (
+            <motion.button 
+              key={tab.id} 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setActiveTab(tab.id)} 
+              className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 ${
+                activeTab === tab.id 
+                  ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30' 
+                  : 'bg-white text-gray-600 hover:bg-primary-50 hover:text-primary-600 border border-gray-200'
+              }`}
+            >
+              {tab.label}
+            </motion.button>
+          ))}
+        </motion.div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-sm text-gray-500 mb-2">ITEMS</h4>
-                      {order.items?.map((item, i) => (
-                        <div key={i} className="flex items-center space-x-3 mb-2">
-                          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-xl">🥬</div>
+        {/* Orders List */}
+        <div className="space-y-4">
+          <AnimatePresence>
+            {(activeTab === 'orders' ? orders : activeTab === 'active' ? pendingOrders : deliveredOrders).map((order, index) => (
+              <motion.div 
+                key={order._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: index * 0.05 }}
+                className="group bg-white rounded-3xl p-6 shadow-card hover:shadow-premium transition-all duration-500 border border-gray-100 hover:border-primary-200"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-4 mb-4">
+                      <span className="font-bold text-primary-600 text-xl">#{order.orderNumber}</span>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${statusColors[order.status]}`}>
+                        {order.status}
+                      </span>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Items */}
+                      <div>
+                        <h4 className="font-semibold text-sm text-gray-500 mb-3 uppercase tracking-wider">Items</h4>
+                        <div className="space-y-3">
+                          {order.items?.slice(0, 2).map((item, i) => (
+                            <div key={i} className="flex items-center space-x-3">
+                              <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-50 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                                🥬
+                              </div>
+                              <div>
+                                <div className="font-semibold text-gray-900">{item.name}</div>
+                                <div className="text-sm text-gray-500">{item.quantity} {item.unit} × ₹{item.price}</div>
+                              </div>
+                            </div>
+                          ))}
+                          {order.items?.length > 2 && (
+                            <p className="text-sm text-primary-600 font-medium">+{order.items.length - 2} more items</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Seller & Address */}
+                      <div>
+                        <h4 className="font-semibold text-sm text-gray-500 mb-3 uppercase tracking-wider">Seller</h4>
+                        <div className="flex items-center space-x-3 mb-4">
+                          <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center shadow-md">
+                            <span className="text-white font-semibold">{order.seller?.name?.charAt(0)}</span>
+                          </div>
                           <div>
-                            <div className="font-medium text-sm">{item.name}</div>
-                            <div className="text-xs text-gray-500">{item.quantity} {item.unit} × ₹{item.price}</div>
+                            <div className="font-semibold text-gray-900">{order.seller?.name}</div>
+                            <div className="text-sm text-gray-500">Verified Seller</div>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-sm text-gray-500 mb-2">SELLER</h4>
-                      <div className="flex items-center space-x-2 mb-3">
-                        <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                          <span className="text-primary-700 font-semibold text-sm">{order.seller?.name?.charAt(0)}</span>
+                        
+                        <h4 className="font-semibold text-sm text-gray-500 mb-2 uppercase tracking-wider">Deliver To</h4>
+                        <div className="flex items-start space-x-2">
+                          <HiLocationMarker className="w-4 h-4 text-primary-500 mt-0.5" />
+                          <p className="text-sm text-gray-600">{order.shippingAddress?.street}, {order.shippingAddress?.city}</p>
                         </div>
-                        <span className="text-sm font-medium">{order.seller?.name}</span>
                       </div>
-                      <h4 className="font-semibold text-sm text-gray-500 mb-1">DELIVER TO</h4>
-                      <p className="text-sm text-gray-600">{order.shippingAddress?.street}, {order.shippingAddress?.city}</p>
                     </div>
+
+                    {/* Tracking */}
+                    {order.tracking?.length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <h4 className="font-semibold text-sm text-gray-500 mb-3 uppercase tracking-wider">Tracking</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {order.tracking.map((t, i) => (
+                            <span key={i} className="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-xl">
+                              {t.status}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {order.tracking?.length > 0 && (
-                    <div className="mt-4 pt-4 border-t">
-                      <h4 className="font-semibold text-sm text-gray-500 mb-2">TRACKING</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {order.tracking.map((t, i) => (
-                          <span key={i} className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">{t.status}</span>
-                        ))}
-                      </div>
+                  {/* Price & Action */}
+                  <div className="lg:text-right lg:min-w-[180px]">
+                    <div className="text-3xl font-bold text-gray-900 mb-1">₹{order.total}</div>
+                    <div className={`text-sm font-semibold mb-3 ${order.paymentStatus === 'paid' ? 'text-green-600' : 'text-yellow-600'}`}>
+                      {order.paymentStatus === 'paid' ? '✓ Paid' : 'Cash on Delivery'}
                     </div>
-                  )}
+                    <div className="text-sm text-gray-400 mb-4">{new Date(order.createdAt).toLocaleDateString()}</div>
+                    <Link 
+                      to={`/orders`} 
+                      className="inline-flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-semibold text-sm group/link"
+                    >
+                      <span>View Details</span>
+                      <HiArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
 
-                <div className="text-right md:min-w-[150px]">
-                  <div className="text-2xl font-bold text-primary-600">₹{order.total}</div>
-                  <div className={`text-sm font-medium ${order.paymentStatus === 'paid' ? 'text-green-600' : 'text-yellow-600'}`}>{order.paymentStatus === 'paid' ? 'Paid' : 'Cash on Delivery'}</div>
-                  <div className="text-xs text-gray-400 mt-1">{new Date(order.createdAt).toLocaleDateString()}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-
+          {/* Empty State */}
           {(activeTab === 'orders' ? orders : activeTab === 'active' ? pendingOrders : deliveredOrders).length === 0 && (
-            <div className="card-premium p-12 text-center">
-              <div className="text-6xl mb-4">📦</div>
-              <h3 className="text-xl font-semibold mb-2">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-3xl p-16 text-center shadow-card border border-gray-100"
+            >
+              <div className="text-8xl mb-6">📦</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 {activeTab === 'active' ? 'No active orders' : activeTab === 'delivered' ? 'No delivered orders yet' : 'No orders yet'}
               </h3>
-              <p className="text-gray-500 mb-6">Start shopping to see your orders here</p>
-              <Link to="/marketplace" className="bg-gradient-to-r from-primary-600 to-primary-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-600 transition inline-flex items-center space-x-2">
+              <p className="text-gray-500 text-lg mb-8 max-w-md mx-auto">
+                Start shopping to see your orders here. Fresh produce from farmers awaits you!
+              </p>
+              <Link 
+                to="/marketplace" 
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-8 py-4 rounded-2xl font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-300 shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transform hover:-translate-y-1"
+              >
                 <HiSearch className="w-5 h-5" />
                 <span>Browse Products</span>
               </Link>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
