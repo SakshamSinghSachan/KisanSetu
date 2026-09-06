@@ -33,15 +33,15 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-600 via-primary-500 to-saffron-500 px-4 pt-20 pb-10 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gray-950 px-4 pt-20 pb-10 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-500/10 rounded-full filter blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-saffron-500/10 rounded-full filter blur-3xl"></div>
       </div>
 
       {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0aC0ydi00aDJ2LTJoLTZ2NmgydjJ6bTAtOHYtMmgtMnYyaDJ6bTYgOGgtMnY0aDJ2LTR6bTAtOHYtMmgtMnYyaDJ6bTYgOGgtMnY0aDJ2LTR6bTAtOHYtMmgtMnYyaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0aC0ydi00aDJ2LTJoLTZ2NmgydjJ6bTAtOHYtMmgtMnYyaDJ6bTYgOGgtMnY0aDJ2LTR6bTAtOHYtMmgtMnYyaDJ6bTYgOGgtMnY0aDJ2LTR6bTAtOHYtMmgtMnYyaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-50"></div>
 
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
@@ -59,13 +59,13 @@ const Register = () => {
           <Link to="/" className="inline-flex items-center space-x-3 mb-6">
             <motion.div 
               whileHover={{ scale: 1.05, rotate: 5 }}
-              className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-2xl"
+              className="w-14 h-14 bg-gradient-to-br from-primary-500 to-saffron-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-primary-500/30"
             >
-              <span className="text-primary-600 font-bold text-2xl">K</span>
+              <span className="text-white font-bold text-2xl">K</span>
             </motion.div>
           </Link>
           <h1 className="text-4xl font-bold font-heading text-white mb-2">Join KisanSetu</h1>
-          <p className="text-white/80 text-lg">Start your journey in fair agriculture trade</p>
+          <p className="text-gray-400 text-lg">Start your journey in fair agriculture trade</p>
         </motion.div>
 
         {/* Progress Steps */}
@@ -79,13 +79,13 @@ const Register = () => {
             <div key={s} className="flex items-center">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
                 step >= s 
-                  ? 'bg-white text-primary-600 shadow-lg' 
-                  : 'bg-white/20 text-white/60'
+                  ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30' 
+                  : 'bg-gray-800 text-gray-500 border border-gray-700'
               }`}>
                 {step > s ? <HiCheck className="w-5 h-5" /> : s}
               </div>
               {s < 2 && (
-                <div className={`w-16 h-1 mx-2 rounded-full transition-all ${step > s ? 'bg-white' : 'bg-white/20'}`}></div>
+                <div className={`w-16 h-1 mx-2 rounded-full transition-all ${step > s ? 'bg-primary-500' : 'bg-gray-700'}`}></div>
               )}
             </div>
           ))}
@@ -96,7 +96,7 @@ const Register = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20"
+          className="bg-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-800/50"
         >
           <AnimatePresence mode="wait">
             {step === 1 ? (
@@ -107,7 +107,7 @@ const Register = () => {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-xl font-bold text-gray-900 mb-6">I am a...</h2>
+                <h2 className="text-xl font-bold text-white mb-6">I am a...</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {roles.map((role) => (
                     <motion.button 
@@ -116,10 +116,10 @@ const Register = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setForm({ ...form, role: role.id })} 
-                      className={`relative p-5 rounded-2xl border-2 text-left transition-all duration-300 ${
+                      className={`relative p-5 rounded-2xl border transition-all duration-300 ${
                         form.role === role.id 
-                          ? 'border-primary-500 bg-primary-50 shadow-lg shadow-primary-500/20' 
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? 'border-primary-500 bg-primary-500/10 shadow-lg shadow-primary-500/20' 
+                          : 'border-gray-700 hover:border-gray-600 hover:bg-gray-800/50'
                       }`}
                     >
                       {form.role === role.id && (
@@ -130,8 +130,8 @@ const Register = () => {
                       <div className={`w-12 h-12 bg-gradient-to-br ${role.color} rounded-xl flex items-center justify-center mb-3`}>
                         <span className="text-2xl">{role.icon}</span>
                       </div>
-                      <div className="font-bold text-gray-900 mb-1">{role.label}</div>
-                      <div className="text-sm text-gray-500">{role.desc}</div>
+                      <div className="font-bold text-white mb-1">{role.label}</div>
+                      <div className="text-sm text-gray-400">{role.desc}</div>
                     </motion.button>
                   ))}
                 </div>
@@ -155,11 +155,11 @@ const Register = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">Your Details</h2>
+                  <h2 className="text-xl font-bold text-white">Your Details</h2>
                   <button 
                     type="button" 
                     onClick={() => setStep(1)} 
-                    className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                    className="text-sm text-primary-400 hover:text-primary-300 font-medium"
                   >
                     Change Role
                   </button>
@@ -168,14 +168,14 @@ const Register = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Full Name</label>
                     <div className="relative group">
-                      <HiUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
+                      <HiUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
                       <input 
                         type="text" 
                         value={form.name} 
                         onChange={(e) => setForm({ ...form, name: e.target.value })} 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-300 bg-gray-50 focus:bg-white" 
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-700 bg-gray-800/50 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all duration-300" 
                         placeholder="John Doe" 
                         required 
                       />
@@ -184,14 +184,14 @@ const Register = () => {
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Email Address</label>
                     <div className="relative group">
-                      <HiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
+                      <HiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
                       <input 
                         type="email" 
                         value={form.email} 
                         onChange={(e) => setForm({ ...form, email: e.target.value })} 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-300 bg-gray-50 focus:bg-white" 
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-700 bg-gray-800/50 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all duration-300" 
                         placeholder="your@email.com" 
                         required 
                       />
@@ -200,14 +200,14 @@ const Register = () => {
 
                   {/* Phone */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Phone Number</label>
                     <div className="relative group">
-                      <HiPhone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
+                      <HiPhone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
                       <input 
                         type="tel" 
                         value={form.phone} 
                         onChange={(e) => setForm({ ...form, phone: e.target.value })} 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-300 bg-gray-50 focus:bg-white" 
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-700 bg-gray-800/50 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all duration-300" 
                         placeholder="+91 98765 43210" 
                         required 
                       />
@@ -216,14 +216,14 @@ const Register = () => {
 
                   {/* Password */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Password</label>
                     <div className="relative group">
-                      <HiLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
+                      <HiLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
                       <input 
                         type="password" 
                         value={form.password} 
                         onChange={(e) => setForm({ ...form, password: e.target.value })} 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-300 bg-gray-50 focus:bg-white" 
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-700 bg-gray-800/50 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all duration-300" 
                         placeholder="Min 6 characters" 
                         required 
                       />
@@ -255,9 +255,9 @@ const Register = () => {
 
           {/* Sign In Link */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+              <Link to="/login" className="text-primary-400 font-semibold hover:text-primary-300 transition-colors">
                 Sign In
               </Link>
             </p>
@@ -269,7 +269,7 @@ const Register = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-center mt-8 text-white/60 text-sm"
+          className="text-center mt-8 text-gray-500 text-sm"
         >
           By signing up, you agree to our Terms & Privacy Policy
         </motion.p>
